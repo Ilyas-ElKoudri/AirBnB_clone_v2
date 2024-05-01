@@ -113,37 +113,35 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-def do_create(self, args):
-    """ Create an object of any class"""
-    args = args.split()
-    if len(args) == 0:
-        print("** class name missing **")
-        return
-    elif args[0] not in HBNBCommand.classes:
-        print("** class doesn't exist **")
-        return
-    else:
-        new_instance = HBNBCommand.classes[args[0]]()
-        if len(args) > 1:
-            for arg in args[1:]:
-                try:
-                    key, value = arg.split("=")
-                    # Replace underscore with space for string type
-                    if value[0] == '"' and value[-1] == '"':
-                        value = value.replace("_", " ").strip('"')
-                        # Escape any double quote inside the value
-                        value = value.replace('\\"', '"')
-                    # Check for float type
-                    elif '.' in value:
-                        value = float(value)
-                    # Default to int type
-                    else:
-                        value = int(value)
-                    setattr(new_instance, key, value)
-                except ValueError:
-                    pass
-        storage.save()
-        print(new_instance.id)
+    def do_create(self, args):
+        """ Create an object of any class"""
+        args = args.split()
+        if len(args) == 0:
+            print("** class name missing **")
+            return
+        elif args[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+        else:
+            new_instance = HBNBCommand.classes[args[0]]()
+            if len(args) > 1:
+                for arg in args[1:]:
+                    try:
+                        key, value = arg.split("=")
+                        # Replace underscore with space for string type
+                        if value[0] == '"' and value[-1] == '"':
+                            value = value.replace("_", " ").strip('"')
+                        # Check for float type
+                        elif '.' in value:
+                            value = float(value)
+                        # Default to int type
+                        else:
+                            value = int(value)
+                        setattr(new_instance, key, value)
+                    except ValueError:
+                        pass
+            storage.save()
+            print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
