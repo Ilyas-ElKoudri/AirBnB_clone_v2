@@ -120,7 +120,6 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name, *params = args.split()
-
         if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
@@ -131,7 +130,12 @@ class HBNBCommand(cmd.Cmd):
             try:
                 key, value = param.split("=")
                 key = key.replace("_", " ")
-                value = value.replace('"', "").replace("_", " ")
+                if value.startswith('"') and value.endswith('"'):
+                    value = value[1:-1].replace('_', ' ').replace('\\"', '"')
+                elif '.' in value:
+                    value = float(value)
+                else:
+                    value = int(value)
                 parsed_params[key] = value
             except ValueError:
                 print("** invalid parameter syntax **")
@@ -140,7 +144,6 @@ class HBNBCommand(cmd.Cmd):
             # Create instance
             try:
                 new_instance = HBNBCommand.classes[class_name](**parsed_params)
-                storage.save()
                 print(new_instance.id)
                 storage.save()
             except Exception as e:
