@@ -3,8 +3,7 @@
 
 The application listens on 0.0.0.0, port 5000.
 Routes:
-    /states: HTML page with a list of all State objects.
-    /states/<id>: HTML page displaying the given state with <id>.
+    /states_list: HTML page with a list of all State objects in DBStorage.
 """
 from models import storage
 from flask import Flask
@@ -14,18 +13,17 @@ app = Flask(__name__)
 
 
 @app.route("/states", strict_slashes=False)
-def states():
-    """Displays an HTML page with a list of all States.
+def states_list():
+    """Displays an HTML page with a list of all State objects in DBStorage.
 
     States are sorted by name.
     """
     states = storage.all("State")
-    return render_template("9-states.html", state=states)
-
+    return render_template("9-states.html", states=states)
 
 @app.route("/states/<id>", strict_slashes=False)
-def states_id(id):
-    """Displays an HTML page with info about <id>, if it exists."""
+def city_byid(id):
+    """Displays an HTML page with info about <id>"""
     for state in storage.all("State").values():
         if state.id == id:
             return render_template("9-states.html", state=state)
@@ -39,4 +37,4 @@ def teardown(exc):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host='0.0.0.0', port='5000')
